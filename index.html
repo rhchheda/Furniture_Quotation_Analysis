@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interior Woodwork - Quotation Evaluation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --ink:#10202f; --ink-2:#1d3446; --muted:#5f7185; --faint:#8d9cae;
+  --teal:#0d6b64; --teal-soft:#e3f3f0; --teal-line:#9fd3cb;
+  --gold:#a97d24; --gold-soft:#faf0d9; --gold-line:#e4c67e;
+  --rust:#a93c25; --rust-soft:#fbe8e3; --rust-line:#e8b3a5;
+  --paper:#f7f6f3; --surface:#ffffff; --line:#dfe4ea; --line-soft:#eef1f5;
+  --shadow:0 1px 2px rgba(16,32,47,.05), 0 12px 32px rgba(16,32,47,.07);
+  --shadow-sm:0 1px 2px rgba(16,32,47,.06);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:var(--paper);color:var(--ink);
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;letter-spacing:-.01em}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.num{text-align:right;font-family:"JetBrains Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:11px;padding-bottom:11px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;letter-spacing:-.01em}
+.brand .mark{width:24px;height:24px;border-radius:6px;background:linear-gradient(140deg,var(--ink),var(--teal));
+  display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700;font-family:Fraunces,serif}
+.chips{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;
+  padding:5px 11px;font-size:11px;font-weight:600;color:var(--muted);background:#fff;white-space:nowrap}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.dot.live{background:#17a67c}
+
+/* ---------- hero ---------- */
+.hero{background:
+   radial-gradient(900px 380px at 88% -8%, rgba(169,125,36,.24), transparent 62%),
+   radial-gradient(700px 420px at 6% 108%, rgba(13,107,100,.30), transparent 60%),
+   linear-gradient(152deg,#0d1c29 0%,#14303f 52%,#123a37 100%);
+  color:#fff}
+.hero .wrap{padding:56px 24px 44px;display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,.85fr);
+  gap:44px;align-items:end}
+.eyebrow{font:600 10.5px/1 "JetBrains Mono",monospace;letter-spacing:.18em;text-transform:uppercase;
+  color:#e9c777;margin:0 0 16px}
+h1{font-size:clamp(34px,5.4vw,60px);line-height:1.02;margin:0 0 16px;color:#fff;max-width:15ch}
+.hero .lede{margin:0;color:rgba(255,255,255,.76);line-height:1.72;max-width:60ch;font-size:15.5px}
+.hero .lede strong{color:#fff;font-weight:600}
+.verdict{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:22px}
+.verdict h2{margin:0 0 4px;font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#e9c777;
+  font-family:Inter,sans-serif;font-weight:700}
+.verdict .who{font-family:Fraunces,serif;font-size:26px;font-weight:600;margin:6px 0 2px;line-height:1.15}
+.verdict .sub{font-size:12.5px;color:rgba(255,255,255,.62);margin-bottom:16px}
+.vsplit{display:grid;grid-template-columns:1fr 1fr;gap:14px;border-top:1px solid rgba(255,255,255,.14);padding-top:14px}
+.vsplit b{display:block;font-size:17px;font-family:"JetBrains Mono",monospace;font-weight:600}
+.vsplit span{font-size:10.5px;color:rgba(255,255,255,.58);line-height:1.4;display:block;margin-top:2px}
+
+/* ---------- layout ---------- */
+main{padding:34px 0 72px}
+section{margin:0 0 40px;scroll-margin-top:70px}
+.shead{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin:0 0 16px;
+  padding-bottom:12px;border-bottom:1px solid var(--line)}
+.kicker{font:600 10.5px/1 "JetBrains Mono",monospace;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--teal);margin-bottom:8px}
+.shead h2{margin:0;font-size:26px}
+.snote{font-size:12.5px;color:var(--muted);max-width:46ch;line-height:1.6;text-align:right;flex-shrink:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-sm)}
+.pad{padding:22px}
+.grid{display:grid;gap:16px}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g-analysis{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
+
+/* ---------- kpi ---------- */
+.kpi{padding:18px 20px;position:relative;overflow:hidden}
+.kpi::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--line)}
+.kpi.good::before{background:var(--teal)} .kpi.warn::before{background:var(--gold)} .kpi.bad::before{background:var(--rust)}
+.kpi label{display:block;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--faint);margin-bottom:9px}
+.kpi strong{display:block;font-family:"JetBrains Mono",monospace;font-size:25px;font-weight:600;
+  letter-spacing:-.02em;line-height:1.1}
+.kpi small{display:block;font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.45}
+
+/* ---------- method callout ---------- */
+.method{background:linear-gradient(180deg,#fff,#fcfbf8);border:1px solid var(--gold-line)}
+.method h3{margin:0 0 10px;font-size:18px}
+.method p{margin:0 0 14px;color:var(--ink-2);font-size:14px;line-height:1.7}
+.method p:last-child{margin-bottom:0}
+.rules{display:grid;gap:0;margin-top:16px;border-top:1px solid var(--line-soft)}
+.rule{display:grid;grid-template-columns:26px 1fr;gap:13px;padding:13px 0;border-bottom:1px solid var(--line-soft);
+  align-items:start}
+.rule:last-child{border-bottom:0;padding-bottom:0}
+.rule .n{width:22px;height:22px;border-radius:6px;background:var(--gold-soft);color:var(--gold);
+  display:grid;place-items:center;font-size:11px;font-weight:700;font-family:"JetBrains Mono",monospace;margin-top:1px}
+.rule b{display:block;font-size:13.5px;margin-bottom:3px}
+.rule span{font-size:12.5px;color:var(--muted);line-height:1.6}
+
+/* ---------- tables ---------- */
+.tablecard{overflow:hidden}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+thead th{background:#f4f6f8;text-align:left;font-size:10px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);padding:11px 12px;border-bottom:1px solid var(--line);
+  white-space:nowrap;position:sticky;top:0}
+thead th.num{text-align:right}
+tbody td{padding:11px 12px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#fbfcfd}
+tbody tr.is-l1{background:var(--teal-soft)}
+tbody tr.is-l1:hover{background:#d8eeea}
+.rk{display:inline-grid;place-items:center;width:21px;height:21px;border-radius:6px;background:#eef1f5;
+  font-size:10.5px;font-weight:700;font-family:"JetBrains Mono",monospace;color:var(--muted)}
+.rk.one{background:var(--teal);color:#fff}
+.vn{font-weight:600;font-size:13.5px;display:block}
+.vo{font-size:11.5px;color:var(--muted);display:block;margin-top:1px}
+.imp{color:var(--gold);font-size:11.5px}
+.adjstack{display:flex;flex-direction:column;gap:5px;align-items:flex-end}
+.adjstack span{font-size:11.5px;line-height:1.25;white-space:nowrap}
+.adjstack span span{display:block;font-size:9px;font-weight:600;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--faint);font-family:Inter,sans-serif}
+.adj-out{color:var(--teal)}
+.zero{color:var(--faint)}
+
+/* ---------- rate matrix ---------- */
+.cellrate{font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums;font-weight:500}
+.hi-low{background:var(--teal-soft);color:#0a544e;font-weight:600}
+.hi-high{background:var(--rust-soft);color:#8e3320;font-weight:600}
+.lump{font-size:9.5px;color:var(--gold);display:block;font-family:Inter,sans-serif;font-weight:600;letter-spacing:.04em}
+.bundled{font-size:9.5px;color:var(--faint);display:block;font-family:Inter,sans-serif;letter-spacing:.03em}
+.na{color:var(--faint);font-family:Inter,sans-serif;font-size:11.5px}
+
+/* ---------- charts ---------- */
+.chartbox{height:340px;position:relative}
+.chartbox.tall{height:400px}
+
+/* ---------- vendor cards ---------- */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.vcard{display:flex;flex-direction:column;overflow:hidden}
+.vcard .vtop{padding:18px 20px 15px;border-bottom:1px solid var(--line-soft);
+  display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+.vcard.rank1{border-color:var(--teal-line)}
+.vcard.rank1 .vtop{background:var(--teal-soft)}
+.vcard .amt{font-family:"JetBrains Mono",monospace;font-size:19px;font-weight:600;white-space:nowrap;letter-spacing:-.02em}
+.vcard .amtsub{font-size:10px;color:var(--muted);text-align:right;display:block;margin-top:2px;font-weight:500}
+.tags{display:flex;gap:6px;flex-wrap:wrap;padding:13px 20px 0}
+.tag{font-size:10px;font-weight:700;letter-spacing:.04em;padding:3.5px 9px;border-radius:999px;
+  background:#eef1f5;color:var(--muted);white-space:nowrap}
+.tag.good{background:var(--teal-soft);color:#0a544e}
+.tag.warn{background:var(--gold-soft);color:#8a6415}
+.tag.bad{background:var(--rust-soft);color:#8e3320}
+.specs{padding:14px 20px 4px;display:grid;gap:0}
+.spec{display:grid;grid-template-columns:88px 1fr;gap:12px;padding:7px 0;border-bottom:1px solid var(--line-soft);
+  font-size:12.5px;align-items:baseline}
+.spec:last-child{border-bottom:0}
+.spec b{color:var(--faint);font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+.spec span{color:var(--ink-2);line-height:1.5}
+.spec .unk{color:var(--faint);font-style:italic}
+.vnote{margin:12px 20px;padding:12px 14px;background:#f8fafb;border-radius:9px;font-size:12.5px;
+  color:var(--ink-2);line-height:1.6;border-left:2px solid var(--line)}
+.vflags{margin:0 20px 14px;display:grid;gap:6px}
+.vflag{font-size:11.5px;color:#8e3320;background:var(--rust-soft);padding:8px 11px;border-radius:8px;line-height:1.5}
+.vsrc{margin-top:auto;padding:11px 20px;border-top:1px solid var(--line-soft);font-size:10.5px;
+  color:var(--faint);background:#fcfcfd;line-height:1.5}
+
+/* ---------- action / risk lists ---------- */
+.actions{display:grid;gap:0}
+.action{display:grid;grid-template-columns:auto 1fr auto;gap:16px;padding:15px 0;
+  border-bottom:1px solid var(--line-soft);align-items:start}
+.action:last-child{border-bottom:0}
+.pri{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;font-size:10.5px;font-weight:700;
+  font-family:"JetBrains Mono",monospace;flex-shrink:0}
+.pri.p1{background:var(--rust);color:#fff} .pri.p2{background:var(--gold);color:#fff} .pri.p3{background:var(--teal);color:#fff}
+.action b{display:block;font-size:13.5px;margin-bottom:3px}
+.action p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.6}
+.action .val{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:600;color:var(--teal);
+  white-space:nowrap;text-align:right}
+.action .val small{display:block;font-size:9.5px;color:var(--faint);font-family:Inter,sans-serif;
+  font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
+
+/* ---------- gaps matrix ---------- */
+.gapcell{text-align:center;font-size:13px}
+.yes{color:var(--teal);font-weight:700} .no{color:var(--rust);font-weight:700} .part{color:var(--gold);font-weight:700}
+.gapscore{font-family:"JetBrains Mono",monospace;font-weight:600}
+.bar{height:5px;border-radius:3px;background:var(--line-soft);overflow:hidden;margin-top:5px;width:64px}
+.bar i{display:block;height:100%;border-radius:3px}
+
+/* ---------- footer ---------- */
+.foot{border-top:1px solid var(--line);padding:24px 0 0;font-size:11.5px;color:var(--faint);line-height:1.7}
+.foot b{color:var(--muted)}
+.btn{border:1px solid var(--line);background:#fff;color:var(--ink-2);font:600 11.5px Inter,sans-serif;
+  padding:8px 14px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.btn:hover{background:#f4f6f8;border-color:var(--faint)}
+.btnrow{display:flex;gap:8px;flex-shrink:0}
+
+@media (max-width:960px){
+  .hero .wrap{grid-template-columns:1fr;gap:30px;padding:42px 24px 34px}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g3,.g2,.g-analysis{grid-template-columns:1fr}
+  .shead{flex-direction:column;align-items:flex-start;gap:10px}
+  .snote{text-align:left;max-width:none}
+}
+@media (max-width:560px){
+  .wrap{padding:0 16px} .g4{grid-template-columns:1fr} h1{font-size:32px}
+  .vsplit{grid-template-columns:1fr}
+}
+@media print{
+  body{background:#fff;font-size:10.5pt}
+  .topbar,.btnrow{display:none}
+  .hero{background:#0d1c29 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  section{break-inside:avoid;margin-bottom:22px}
+  .card{box-shadow:none}
+  .vcard,.tablecard{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand"><span class="mark">Q</span><span>Quotation Evaluation<span style="color:var(--faint);font-weight:500"> &middot; Interior Woodwork</span></span></div>
+    <div class="chips">
+      <span class="chip"><span class="dot" id="mode-dot"></span><span id="data-mode">Loading</span></span>
+      <span class="chip" id="chip-count">&mdash;</span>
+      <span class="chip" id="chip-date">&mdash;</span>
+    </div>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Commercial evaluation &middot; like-for-like basis</p>
+      <h1>Six vendors, one comparable basket.</h1>
+      <p class="lede">Six vendors returned eight priced options between them &mdash; Infinity and Sattva each gave two &mdash; covering different areas, different inclusions, different tax positions and, in two cases, extra rooms nobody else was asked to price. This evaluation strips all of that back to a single common basket of <strong>wardrobe, loft, dressing unit and study table</strong>, then ranks on cost per square foot so the numbers actually mean the same thing.</p>
+    </div>
+    <div class="verdict">
+      <h2>Lowest evaluated cost</h2>
+      <div class="who" id="v-who">&mdash;</div>
+      <div class="sub" id="v-sub">&mdash;</div>
+      <div class="vsplit">
+        <div><b id="v-rate">&mdash;</b><span>Per sq.ft, adjusted basket</span></div>
+        <div><b id="v-gap">&mdash;</b><span>Below the next option</span></div>
+        <div><b id="v-spread">&mdash;</b><span>L1 to L8 spread</span></div>
+        <div><b id="v-docs">&mdash;</b><span>Fully documented options</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ KPI ============ -->
+  <section>
+    <div class="grid g4" id="kpis"></div>
+  </section>
+
+  <!-- ============ METHOD ============ -->
+  <section id="method">
+    <div class="shead">
+      <div><div class="kicker">01 &middot; Method</div><h2>Why the raw totals mislead</h2></div>
+      <div class="snote">Ranking the options as received would be an error. Four adjustments are needed before any two numbers can be compared.</div>
+    </div>
+    <div class="grid g-analysis">
+      <div class="card method pad">
+        <h3>The adjustments</h3>
+        <p>The quotes arrived covering areas from <span class="mono">122</span> to <span class="mono">153 sq.ft</span>, with three vendors omitting a dressing unit entirely and two pricing rooms that were never part of the enquiry. Comparing the bottom lines as they stand would rank the vendor who quoted the least work, not the vendor who offers the best value.</p>
+        <div class="rules" id="rules"></div>
+      </div>
+      <div class="card pad">
+        <div class="kicker" style="margin-bottom:12px">Effect of normalising</div>
+        <div class="chartbox" style="height:auto;min-height:300px"><canvas id="deltaChart"></canvas></div>
+        <p style="font-size:11.5px;color:var(--muted);margin:14px 0 0;line-height:1.6">Movement between the quoted subtotal and the adjusted like-for-like basket. Bars to the right mean the vendor looked cheaper than they are because scope was missing from their quote.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RANKING ============ -->
+  <section id="ranking">
+    <div class="shead">
+      <div><div class="kicker">02 &middot; Ranking</div><h2>Like-for-like comparison</h2></div>
+      <div class="snote">Ranked on the adjusted basket excluding GST. The right-hand column applies 18% to every vendor so the true cash outlay is visible even where a vendor stated no tax position.</div>
+    </div>
+    <div class="card tablecard">
+      <div class="scroll">
+        <table>
+          <thead><tr>
+            <th style="width:34px"></th><th>Vendor / option</th><th>Grade</th><th>Documentation</th>
+            <th class="num">Basket<br>sq.ft</th><th class="num">As quoted<br>&#8377;</th><th class="num">Scope<br>adjustment</th>
+            <th class="num">Adjusted<br>&#8377; ex-GST</th><th class="num">&#8377; / sq.ft</th><th class="num">With 18%<br>GST</th>
+          </tr></thead>
+          <tbody id="rank-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <p style="font-size:11.5px;color:var(--muted);margin:12px 2px 0;line-height:1.6">
+      <b style="color:var(--gold)">Scope adjustment</b> adds a notional dressing unit of <span class="mono" id="dref">17.5</span> sq.ft to the three vendors who did not quote one, charged at that vendor&rsquo;s own wardrobe rate. It is an estimate for comparison only &mdash; not a price any vendor has offered.
+    </p>
+  </section>
+
+  <!-- ============ RATE MATRIX ============ -->
+  <section id="rates">
+    <div class="shead">
+      <div><div class="kicker">03 &middot; Rate card</div><h2>Where each vendor is expensive</h2></div>
+      <div class="snote">Rate per square foot for every line. Green marks the cheapest rate in each column, red the dearest. Lumpsum lines are converted back to a rate against the vendor&rsquo;s own stated area.</div>
+    </div>
+    <div class="card tablecard">
+      <div class="scroll">
+        <table>
+          <thead><tr>
+            <th>Vendor / option</th>
+            <th class="num">Wardrobe</th><th class="num">Loft</th><th class="num">Dressing</th><th class="num">Study / table</th>
+            <th class="num">Blended</th><th style="width:200px">Rate-card observation</th>
+          </tr></thead>
+          <tbody id="rate-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card pad"><div class="kicker" style="margin-bottom:12px">Cost build-up, adjusted basket</div><div class="chartbox"><canvas id="stackChart"></canvas></div></div>
+      <div class="card pad"><div class="kicker" style="margin-bottom:12px">Rate spread by element</div><div class="chartbox"><canvas id="rateChart"></canvas></div></div>
+    </div>
+  </section>
+
+  <!-- ============ NEGOTIATION ============ -->
+  <section id="negotiation">
+    <div class="shead">
+      <div><div class="kicker">04 &middot; Negotiation</div><h2>Where the money actually is</h2></div>
+      <div class="snote">Each item below is a specific line where a vendor prices well outside the range set by the other five. Values are the saving if the line were brought to the median.</div>
+    </div>
+    <div class="card pad"><div class="actions" id="negotiation-list"></div></div>
+  </section>
+
+  <!-- ============ VENDOR CARDS ============ -->
+  <section id="vendors">
+    <div class="shead">
+      <div><div class="kicker">05 &middot; Vendor detail</div><h2>Specification and evidence</h2></div>
+      <div class="snote">What each vendor has actually committed to in writing, what was only said verbally, and what remains unanswered.</div>
+    </div>
+    <div class="vgrid" id="vendor-grid"></div>
+  </section>
+
+  <!-- ============ GAPS ============ -->
+  <section id="gaps">
+    <div class="shead">
+      <div><div class="kicker">06 &middot; Risk</div><h2>Documentation gaps</h2></div>
+      <div class="snote">A low price is only a low price if it is enforceable. This matrix scores what each vendor has committed to in writing.</div>
+    </div>
+    <div class="card tablecard">
+      <div class="scroll">
+        <table>
+          <thead><tr>
+            <th>Vendor / option</th><th class="gapcell">Plywood</th><th class="gapcell">Laminate</th><th class="gapcell">Hardware</th>
+            <th class="gapcell">Warranty</th><th class="gapcell">Timeline</th><th class="gapcell">Tax</th><th class="gapcell">Finish</th>
+            <th class="num">Score</th>
+          </tr></thead>
+          <tbody id="gap-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <p style="font-size:11.5px;color:var(--muted);margin:12px 2px 0">
+      <span class="yes">&#10003;</span> stated in writing &nbsp;&middot;&nbsp; <span class="part">~</span> stated verbally or needs confirmation &nbsp;&middot;&nbsp; <span class="no">&times;</span> not stated at all
+    </p>
+  </section>
+
+  <!-- ============ ADD-ONS ============ -->
+  <section id="addons">
+    <div class="shead">
+      <div><div class="kicker">07 &middot; Out of scope</div><h2>Work only some vendors priced</h2></div>
+      <div class="snote">These lines are held outside the ranking. Two vendors priced additional rooms and units that the others were never asked to quote, so including them would distort the comparison.</div>
+    </div>
+    <div class="card tablecard">
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Vendor</th><th>Item</th><th>Why it sits outside the ranking</th>
+            <th class="num">Sq.ft</th><th class="num">Rate</th><th class="num">Amount</th></tr></thead>
+          <tbody id="addon-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="grid g2" style="margin-top:16px" id="addon-cards"></div>
+  </section>
+
+  <!-- ============ RECOMMENDATION ============ -->
+  <section id="recommendation">
+    <div class="shead">
+      <div><div class="kicker">08 &middot; Recommendation</div><h2>Two routes worth taking forward</h2></div>
+      <div class="snote">Neither route should be awarded on the current paperwork. Both need a revised written quote first.</div>
+    </div>
+    <div class="grid g2" id="routes"></div>
+    <div class="card pad" style="margin-top:16px">
+      <div class="kicker" style="margin-bottom:14px">Before awarding &mdash; ask every shortlisted vendor for this in writing</div>
+      <div class="actions" id="checklist"></div>
+    </div>
+  </section>
+
+  <div class="foot">
+    <div style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:flex-start">
+      <div style="max-width:70ch">
+        <b>Basis of this evaluation.</b> Every figure is taken from the vendor&rsquo;s own document and reconciles to the total that vendor stated &mdash; three formal PDFs and four handwritten sheets. Where a vendor bundled lines, the bundle is preserved rather than split. Material specifications recorded as verbal are marked as such throughout and carry no contractual weight until confirmed in writing.
+        <span id="foot-src" style="display:block;margin-top:8px"></span>
+      </div>
+      <div class="btnrow">
+        <button class="btn" onclick="exportCSV()">Export CSV</button>
+        <button class="btn" onclick="window.print()">Print / PDF</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+/* =========================================================================
+   Data. Rendered from the embedded set below; if this page is served from a
+   Google Apps Script container (or GAS_WEB_APP_URL is filled in), live sheet
+   data replaces it at load.
+   ========================================================================= */
+const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyMYxN_rUItA3a3SGoLJrK90YOeVKV1axVf-P_fCurovk38TDzFkkvcjbUUM87yir8w/exec";
+
+const DATA = {
+ "project": {
+  "client": "Rakesh Chheda",
+  "scope": "Residential woodwork - bedroom wardrobes, loft, dressing unit and study table",
+  "basket": "Wardrobe + Loft + Dressing unit + Study/Window table",
+  "quotes": 6,
+  "options": 8,
+  "asof": "25 August 2026"
+ },
+ "gst": 0.18,
+ "dressingRefArea": 17.5,
+ "medians": {
+  "wardrobe": 1675.0,
+  "loft": 919.5402298850574,
+  "dressing": 1825.0,
+  "study": 1350.0
+ },
+ "vendors": [
+  {
+   "id": "jagadish",
+   "vendor": "Mr. Jagadish",
+   "option": "Handwritten quote",
+   "source": "Handwritten + verbal",
+   "sourceFile": "Mr.Jagadish.jpeg, Mr.Jagadish Loft+Showcase,Crockery.jpeg",
+   "plywood": "IS:303 grade commercial plywood",
+   "plywoodGrade": "Commercial / 303",
+   "plywoodConfidence": "verbal",
+   "laminate": "Not specified",
+   "hardware": "Godrej hardware",
+   "hardwareConfidence": "verbal",
+   "warranty": "Not specified",
+   "tat": null,
+   "factoryFinish": "Not confirmed",
+   "gstStated": null,
+   "lines": [
+    {
+     "item": "Wardrobe + Loft (Bedroom 2)",
+     "cat": "wardrobe",
+     "covers": [
+      "loft"
+     ],
+     "area": 136.0,
+     "rate": 950,
+     "amount": 129200,
+     "basis": "sqft",
+     "note": "Bundled at a single blended rate - wardrobe and loft are not priced separately"
+    },
+    {
+     "item": "Table below window",
+     "cat": "study",
+     "area": 7.0,
+     "rate": 1550,
+     "amount": 10850,
+     "basis": "sqft",
+     "note": "12\" deep x 41\""
+    },
+    {
+     "item": "Dressing table / wall unit with LHS profile tower",
+     "cat": "dressing",
+     "area": 8.75,
+     "rate": 1250,
+     "amount": 10937,
+     "basis": "sqft",
+     "note": "9\" deep x 41\" - roughly half the area of the dressing units quoted by Sattva and WeWia"
+    }
+   ],
+   "extras": [],
+   "addons": [
+    {
+     "item": "Bedroom-3 loft (14'0\" x 3'0\")",
+     "area": 42.0,
+     "rate": 950,
+     "amount": 39900
+    },
+    {
+     "item": "Showcase (5'0\" x 2'0\", 13\" deep)",
+     "area": 10.0,
+     "rate": 1550,
+     "amount": 15500
+    },
+    {
+     "item": "Crockery unit (16\" deep)",
+     "area": 12.5,
+     "rate": 1050,
+     "amount": 13125
+    }
+   ],
+   "quotedSubtotal": 150987,
+   "fullQuoteWithAddons": 219512,
+   "observations": "Lowest rate card in the set by a wide margin. Complete basket - wardrobe, loft, dressing and window table are all covered. Nothing is documented in writing beyond the sketch: no laminate brand, no hardware model, no warranty, no timeline and no tax position.",
+   "m": {
+    "basketAmt": 150987,
+    "basketArea": 151.75,
+    "basketRate": 994.9719934102142,
+    "extrasAmt": 0,
+    "addonsAmt": 68525,
+    "imputedDressing": 0,
+    "imputedRate": null,
+    "adjAmt": 150987,
+    "adjArea": 151.75,
+    "adjRate": 994.9719934102142,
+    "adjWithGst": 178164.66,
+    "quotedSubtotal": 150987,
+    "quotedWithGst": 178164.66,
+    "gstStatedAmt": 0,
+    "headlineWardrobe": 950,
+    "scopeComplete": true
+   },
+   "sourceNote": "Handwritten sketch on Nerolac notepad; add-ons on a second sheet totalling Rs.2,19,512",
+   "rank": 1,
+   "rateNote": "Lowest rate card in the set. Wardrobe and loft are bundled at one blended rate, so the two cannot be separated or renegotiated independently."
+  },
+  {
+   "id": "infinity2",
+   "vendor": "Infinity Modular",
+   "option": "Option 2 - BWR 303",
+   "source": "Formal PDF",
+   "sourceFile": "INFINITY MODULAR.pdf",
+   "plywood": "303 BWR, 75% waterproof (charged at Rs.85/sqft)",
+   "plywoodGrade": "BWR / 303",
+   "plywoodConfidence": "written",
+   "laminate": "1mm outer (up to Rs.1,800 range), 0.8mm inner",
+   "hardware": "EBCO; Saint-Gobain glass",
+   "hardwareConfidence": "written",
+   "warranty": "Not specified",
+   "tat": null,
+   "factoryFinish": "Modular process likely - confirm",
+   "gstStated": null,
+   "lines": [
+    {
+     "item": "Bedroom wardrobe",
+     "cat": "wardrobe",
+     "area": 73.0,
+     "rate": 1600,
+     "amount": 116800,
+     "basis": "sqft",
+     "note": ""
+    },
+    {
+     "item": "Loft",
+     "cat": "loft",
+     "area": 44.0,
+     "rate": 800,
+     "amount": 35200,
+     "basis": "sqft",
+     "note": "Lowest loft rate in the set"
+    },
+    {
+     "item": "Study table",
+     "cat": "study",
+     "area": 9.0,
+     "rate": 1000,
+     "amount": 9000,
+     "basis": "sqft",
+     "note": ""
+    }
+   ],
+   "extras": [
+    {
+     "item": "Book shelf",
+     "area": 8.0,
+     "rate": 1200,
+     "amount": 9600,
+     "why": "Not part of the common basket - only Infinity quoted a book shelf"
+    },
+    {
+     "item": "Round off",
+     "area": null,
+     "rate": null,
+     "amount": 400,
+     "why": "Vendor's own round-off to reach Rs.1,71,000"
+    }
+   ],
+   "addons": [],
+   "quotedSubtotal": 171000,
+   "fullQuoteWithAddons": 171000,
+   "observations": "The best-documented low-cost option. Plywood, laminate thickness, hardware brand and glass brand are all named in writing. No dressing unit was quoted, and no warranty or delivery timeline is stated.",
+   "m": {
+    "basketAmt": 161000,
+    "basketArea": 126.0,
+    "basketRate": 1277.7777777777778,
+    "extrasAmt": 10000,
+    "addonsAmt": 0,
+    "imputedDressing": 28000.0,
+    "imputedRate": 1600,
+    "adjAmt": 189000.0,
+    "adjArea": 143.5,
+    "adjRate": 1317.0731707317073,
+    "adjWithGst": 223020.0,
+    "quotedSubtotal": 171000,
+    "quotedWithGst": 201780.0,
+    "gstStatedAmt": 0,
+    "headlineWardrobe": 1600,
+    "scopeComplete": false
+   },
+   "sourceNote": "INFINITY MODULAR.pdf - Estimation copy No:64",
+   "rank": 2,
+   "rateNote": "Cheapest loft rate anywhere at Rs.800. Wardrobe rate matches Ramdev exactly, but here the plywood and hardware behind it are named in writing."
+  },
+  {
+   "id": "ramdev",
+   "vendor": "Ramdev Interiors",
+   "option": "Handwritten quote",
+   "source": "Handwritten",
+   "sourceFile": "Ramdev.png, Ramdev-1.png",
+   "plywood": "Not specified",
+   "plywoodGrade": "Not specified",
+   "plywoodConfidence": "none",
+   "laminate": "Not specified",
+   "hardware": "Not specified",
+   "hardwareConfidence": "none",
+   "warranty": "Not specified",
+   "tat": null,
+   "factoryFinish": "Not confirmed",
+   "gstStated": null,
+   "lines": [
+    {
+     "item": "Wardrobe (10' x 7')",
+     "cat": "wardrobe",
+     "area": 70.0,
+     "rate": 1600,
+     "amount": 112000,
+     "basis": "sqft",
+     "note": ""
+    },
+    {
+     "item": "Loft (14' x 3')",
+     "cat": "loft",
+     "area": 42.0,
+     "rate": 1050,
+     "amount": 44100,
+     "basis": "sqft",
+     "note": ""
+    },
+    {
+     "item": "Table (4' x 2.5')",
+     "cat": "study",
+     "area": 10.0,
+     "rate": 1250,
+     "amount": 12500,
+     "basis": "sqft",
+     "note": ""
+    }
+   ],
+   "extras": [],
+   "addons": [],
+   "quotedSubtotal": 168600,
+   "fullQuoteWithAddons": 168600,
+   "observations": "The weakest documentation in the set: three lines on a notepad with no material specification of any kind. Charges an Infinity-level wardrobe rate of Rs.1,600/sqft without naming the plywood, laminate or hardware that rate buys. No dressing unit.",
+   "m": {
+    "basketAmt": 168600,
+    "basketArea": 122.0,
+    "basketRate": 1381.967213114754,
+    "extrasAmt": 0,
+    "addonsAmt": 0,
+    "imputedDressing": 28000.0,
+    "imputedRate": 1600,
+    "adjAmt": 196600.0,
+    "adjArea": 139.5,
+    "adjRate": 1409.3189964157707,
+    "adjWithGst": 231988.0,
+    "quotedSubtotal": 168600,
+    "quotedWithGst": 198948.0,
+    "gstStatedAmt": 0,
+    "headlineWardrobe": 1600,
+    "scopeComplete": false
+   },
+   "sourceNote": "Handwritten note dated 21-07-2026",
+   "rank": 3,
+   "rateNote": "Charges an Infinity-level wardrobe rate without naming any material. The rate is unsupported by specification."
+  },
+  {
+   "id": "laxman",
+   "vendor": "Mr. Laxman",
+   "option": "Handwritten quote",
+   "source": "Handwritten + verbal",
+   "sourceFile": "Mr.Laxman.png, Mr.Laxman-1.png, Mr.Laxman-Crockery.jpeg",
+   "plywood": "Century Sainik 710 BWP",
+   "plywoodGrade": "BWP / 710",
+   "plywoodConfidence": "verbal",
+   "laminate": "Not specified",
+   "hardware": "Tandem drawers; profile doors",
+   "hardwareConfidence": "verbal",
+   "warranty": "10-year certificate",
+   "tat": null,
+   "factoryFinish": "Not confirmed",
+   "gstStated": null,
+   "lines": [
+    {
+     "item": "Wardrobe + Dressing unit (11'0\" x 7'0\")",
+     "cat": "wardrobe",
+     "covers": [
+      "dressing"
+     ],
+     "area": 77.0,
+     "rate": 1350,
+     "amount": 103950,
+     "basis": "sqft",
+     "note": "Dressing unit is bundled inside this 77 sqft, with mirror and Tandem drawers shown on the sketch"
+    },
+    {
+     "item": "Loft (15'6\" x 3'0\")",
+     "cat": "loft",
+     "area": 46.8,
+     "rate": 1350,
+     "amount": 63180,
+     "basis": "sqft",
+     "note": "Priced at the same rate as the wardrobe - every other vendor discounts loft well below the wardrobe rate"
+    },
+    {
+     "item": "Study table + box with panelling (3'6\" x 7'0\")",
+     "cat": "study",
+     "area": 25.2,
+     "rate": 1450,
+     "amount": 36540,
+     "basis": "sqft",
+     "note": ""
+    }
+   ],
+   "extras": [],
+   "addons": [
+    {
+     "item": "Hall crockery / box unit, profile door with glass shelf (5'6\" x 7'0\")",
+     "area": 39.2,
+     "rate": 1450,
+     "amount": 56840
+    }
+   ],
+   "quotedSubtotal": 203670,
+   "fullQuoteWithAddons": 260510,
+   "observations": "The only quote that pairs a premium 710 BWP plywood with a 10-year warranty certificate, and the basket is complete. The plywood claim is verbal and the loft is priced at a full wardrobe rate, which is where the negotiation headroom sits.",
+   "m": {
+    "basketAmt": 203670,
+    "basketArea": 149.0,
+    "basketRate": 1366.9127516778524,
+    "extrasAmt": 0,
+    "addonsAmt": 56840,
+    "imputedDressing": 0,
+    "imputedRate": null,
+    "adjAmt": 203670,
+    "adjArea": 149.0,
+    "adjRate": 1366.9127516778524,
+    "adjWithGst": 240330.59999999998,
+    "quotedSubtotal": 203670,
+    "quotedWithGst": 240330.59999999998,
+    "gstStatedAmt": 0,
+    "headlineWardrobe": 1350,
+    "scopeComplete": true
+   },
+   "sourceNote": "Handwritten sheets on Eon Plywoods letterhead dated 11-08-2026; crockery unit on a third sheet",
+   "rank": 4,
+   "rateNote": "Loft is priced at the full wardrobe rate of Rs.1,350. Every other vendor discounts loft to between 47% and 63% of their wardrobe rate."
+  },
+  {
+   "id": "wewia",
+   "vendor": "WeWia",
+   "option": "Standard quote",
+   "source": "Formal PDF",
+   "sourceFile": "WeWia.pdf",
+   "plywood": "303 grade for wardrobes; shutters in blockboard",
+   "plywoodGrade": "Commercial / 303",
+   "plywoodConfidence": "written",
+   "laminate": "1mm on all surfaces",
+   "hardware": "Hafele; soft-close specified for kitchen only",
+   "hardwareConfidence": "written",
+   "warranty": "10 years on all interior works",
+   "tat": 55,
+   "factoryFinish": "Confirm scope",
+   "gstStated": 0.18,
+   "lines": [
+    {
+     "item": "Leaf-door wardrobe x 2 (1200 x 2100mm each)",
+     "cat": "wardrobe",
+     "area": 56.0,
+     "rate": 1750,
+     "amount": 98000,
+     "basis": "sqft",
+     "note": "PDF shows 28 sqft per unit; 56 sqft is the billed total for two"
+    },
+    {
+     "item": "Loft (4380 x 900mm)",
+     "cat": "loft",
+     "area": 43.8,
+     "rate": 850,
+     "amount": 37230,
+     "basis": "sqft",
+     "note": ""
+    },
+    {
+     "item": "Dressing unit with mirror and LED (790 x 2100mm)",
+     "cat": "dressing",
+     "area": 18.43,
+     "rate": 1650,
+     "amount": 30415,
+     "basis": "sqft",
+     "note": ""
+    },
+    {
+     "item": "Study table (1500 x 2100mm)",
+     "cat": "study",
+     "area": 35.0,
+     "rate": 1250,
+     "amount": 43750,
+     "basis": "sqft",
+     "note": "Largest study table in the set at 35 sqft"
+    }
+   ],
+   "extras": [
+    {
+     "item": "Transportation & packing",
+     "area": null,
+     "rate": null,
+     "amount": 5000,
+     "why": "Lumpsum logistics charge - no other vendor lines this out separately"
+    }
+   ],
+   "addons": [],
+   "quotedSubtotal": 214395,
+   "fullQuoteWithAddons": 214395,
+   "observations": "The most complete paperwork in the set: named brands, a 10-year warranty, a 55-day delivery commitment, a stated payment schedule and an explicit 18% GST position. Two caveats are written into the quote itself - soft-close hardware is specified for kitchen only, and handle allowances are capped with the balance payable by the customer.",
+   "flags": [
+    "Soft-close hardware is committed for kitchen only; room hardware is Hafele but the closing mechanism is not committed",
+    "Handle allowance capped at Rs.650 (wardrobe) and Rs.180 (loft) - anything above is payable extra",
+    "Quote is described by the vendor as a rough estimation that may change once designs are finalised"
+   ],
+   "m": {
+    "basketAmt": 209395,
+    "basketArea": 153.23,
+    "basketRate": 1366.5404946811982,
+    "extrasAmt": 5000,
+    "addonsAmt": 0,
+    "imputedDressing": 0,
+    "imputedRate": null,
+    "adjAmt": 209395,
+    "adjArea": 153.23,
+    "adjRate": 1366.5404946811982,
+    "adjWithGst": 247086.09999999998,
+    "quotedSubtotal": 214395,
+    "quotedWithGst": 252986.09999999998,
+    "gstStatedAmt": 38591.1,
+    "headlineWardrobe": 1750,
+    "scopeComplete": true
+   },
+   "sourceNote": "WeWia.pdf - Project code W1112A dated 21-07-2026",
+   "rank": 5,
+   "rateNote": "Consistent, mid-market rate card throughout. The largest study table in the set at 35 sq.ft drives the total more than the rate does."
+  },
+  {
+   "id": "infinity1",
+   "vendor": "Infinity Modular",
+   "option": "Option 1 - BWP 710",
+   "source": "Formal PDF",
+   "sourceFile": "INFINITY MODULAR.pdf",
+   "plywood": "710 BWP, 100% waterproof (charged at Rs.110/sqft)",
+   "plywoodGrade": "BWP / 710",
+   "plywoodConfidence": "written",
+   "laminate": "1mm outer (up to Rs.1,800 range), 0.8mm inner",
+   "hardware": "EBCO; Saint-Gobain glass",
+   "hardwareConfidence": "written",
+   "warranty": "Not specified",
+   "tat": null,
+   "factoryFinish": "Modular process likely - confirm",
+   "gstStated": null,
+   "lines": [
+    {
+     "item": "Bedroom wardrobe",
+     "cat": "wardrobe",
+     "area": 73.0,
+     "rate": 1800,
+     "amount": 131400,
+     "basis": "sqft",
+     "note": ""
+    },
+    {
+     "item": "Loft",
+     "cat": "loft",
+     "area": 44.0,
+     "rate": 900,
+     "amount": 39600,
+     "basis": "sqft",
+     "note": ""
+    },
+    {
+     "item": "Study table",
+     "cat": "study",
+     "area": 9.0,
+     "rate": 1200,
+     "amount": 10800,
+     "basis": "sqft",
+     "note": ""
+    }
+   ],
+   "extras": [
+    {
+     "item": "Book shelf",
+     "area": 8.0,
+     "rate": 1400,
+     "amount": 11200,
+     "why": "Not part of the common basket - only Infinity quoted a book shelf"
+    }
+   ],
+   "addons": [],
+   "quotedSubtotal": 193000,
+   "fullQuoteWithAddons": 193000,
+   "observations": "The only BWP option backed by a written plywood specification, and the underlying material rate is disclosed (Rs.110/sqft against Rs.85/sqft for the BWR option). No dressing unit, no warranty and no timeline.",
+   "m": {
+    "basketAmt": 181800,
+    "basketArea": 126.0,
+    "basketRate": 1442.857142857143,
+    "extrasAmt": 11200,
+    "addonsAmt": 0,
+    "imputedDressing": 31500.0,
+    "imputedRate": 1800,
+    "adjAmt": 213300.0,
+    "adjArea": 143.5,
+    "adjRate": 1486.411149825784,
+    "adjWithGst": 251694.0,
+    "quotedSubtotal": 193000,
+    "quotedWithGst": 227740.0,
+    "gstStatedAmt": 0,
+    "headlineWardrobe": 1800,
+    "scopeComplete": false
+   },
+   "sourceNote": "INFINITY MODULAR.pdf - Estimation copy No:64",
+   "rank": 6,
+   "rateNote": "The BWP premium over Option 2 is transparent: Rs.200/sq.ft on wardrobe, Rs.100 on loft, tracking the disclosed Rs.110 vs Rs.85 plywood cost."
+  },
+  {
+   "id": "sattva1",
+   "vendor": "Sattva Buildcraft",
+   "option": "Option 1 - Commercial",
+   "source": "Formal PDF",
+   "sourceFile": "Sattva Buildcraft.pdf",
+   "plywood": "Commercial ply 19mm",
+   "plywoodGrade": "Commercial / 303",
+   "plywoodConfidence": "written",
+   "laminate": "Premium Advance laminate",
+   "hardware": "Auto soft-close SS 3D hinges; Dairy/Ebco/Ibko telescopic channels",
+   "hardwareConfidence": "written",
+   "warranty": "Not specified",
+   "tat": null,
+   "factoryFinish": "Not confirmed",
+   "gstStated": 0.18,
+   "lines": [
+    {
+     "item": "Master bedroom - 2 nos wardrobe (4' x 7' each)",
+     "cat": "wardrobe",
+     "area": 56.0,
+     "rate": 1800,
+     "amount": 100800,
+     "basis": "sqft",
+     "note": ""
+    },
+    {
+     "item": "Master bedroom - dressing unit (2'6\" x 7')",
+     "cat": "dressing",
+     "area": 17.5,
+     "rate": 2000,
+     "amount": 35000,
+     "basis": "sqft",
+     "note": "Highest dressing rate in the set"
+    },
+    {
+     "item": "Master bedroom - full-length loft (14'6\" x 3')",
+     "cat": "loft",
+     "area": 43.5,
+     "rate": null,
+     "amount": 40000,
+     "basis": "lumpsum",
+     "note": "Quoted lumpsum; works back to Rs.920/sqft"
+    },
+    {
+     "item": "Bedroom - study table (3' x 6')",
+     "cat": "study",
+     "area": 18.0,
+     "rate": null,
+     "amount": 46000,
+     "basis": "lumpsum",
+     "note": "Quoted lumpsum; works back to Rs.2,556/sqft - roughly double every other vendor"
+    }
+   ],
+   "extras": [],
+   "addons": [],
+   "quotedSubtotal": 221800,
+   "fullQuoteWithAddons": 221800,
+   "observations": "Complete basket and a properly formatted BOQ, but the most expensive commercial-grade option in the set. Two of the four lines are lumpsum rather than rate-based, which is where the pricing runs away from the market.",
+   "flags": [
+    "Study table at an implied Rs.2,556/sqft against a Rs.1,000-1,550 range elsewhere",
+    "Quote is valid for 15 days only from 21-07-2026 - already lapsed and will need reissuing"
+   ],
+   "m": {
+    "basketAmt": 221800,
+    "basketArea": 135.0,
+    "basketRate": 1642.962962962963,
+    "extrasAmt": 0,
+    "addonsAmt": 0,
+    "imputedDressing": 0,
+    "imputedRate": null,
+    "adjAmt": 221800,
+    "adjArea": 135.0,
+    "adjRate": 1642.962962962963,
+    "adjWithGst": 261724.0,
+    "quotedSubtotal": 221800,
+    "quotedWithGst": 261724.0,
+    "gstStatedAmt": 39924.0,
+    "headlineWardrobe": 1800,
+    "scopeComplete": true
+   },
+   "sourceNote": "Sattva Buildcraft.pdf - BOQ dated 21-07-2026",
+   "rank": 7,
+   "rateNote": "Two of four lines are lumpsum. The study table works back to Rs.2,556/sq.ft against a Rs.1,000-1,550 range elsewhere."
+  },
+  {
+   "id": "sattva2",
+   "vendor": "Sattva Buildcraft",
+   "option": "Option 2 - BWP",
+   "source": "Formal PDF",
+   "sourceFile": "Sattva Buildcraft-1.pdf",
+   "plywood": "Green Ply / Century Sainik BWP 19mm",
+   "plywoodGrade": "BWP / 710",
+   "plywoodConfidence": "written",
+   "laminate": "Premium Advance laminate",
+   "hardware": "Auto soft-close SS 3D hinges; Dairy/Ebco/Ibko telescopic channels",
+   "hardwareConfidence": "written",
+   "warranty": "Not specified",
+   "tat": null,
+   "factoryFinish": "Not confirmed",
+   "gstStated": 0.18,
+   "lines": [
+    {
+     "item": "Master bedroom - 2 nos wardrobe (4' x 7' each)",
+     "cat": "wardrobe",
+     "area": 56.0,
+     "rate": 2200,
+     "amount": 123200,
+     "basis": "sqft",
+     "note": "Highest wardrobe rate in the set"
+    },
+    {
+     "item": "Master bedroom - dressing unit (2'6\" x 7')",
+     "cat": "dressing",
+     "area": 17.5,
+     "rate": 2000,
+     "amount": 35000,
+     "basis": "sqft",
+     "note": ""
+    },
+    {
+     "item": "Master bedroom - full-length loft (14'6\" x 3')",
+     "cat": "loft",
+     "area": 43.5,
+     "rate": null,
+     "amount": 50000,
+     "basis": "lumpsum",
+     "note": "Quoted lumpsum; works back to Rs.1,149/sqft"
+    },
+    {
+     "item": "Bedroom - study table (3' x 6')",
+     "cat": "study",
+     "area": 18.0,
+     "rate": null,
+     "amount": 50000,
+     "basis": "lumpsum",
+     "note": "Quoted lumpsum; works back to Rs.2,778/sqft - the single highest unit rate anywhere in the analysis"
+    }
+   ],
+   "extras": [],
+   "addons": [],
+   "quotedSubtotal": 258200,
+   "fullQuoteWithAddons": 258200,
+   "observations": "The most expensive option by a clear margin and the ceiling of the range. Same written specification quality as Option 1, with the BWP upgrade adding Rs.36,400 over the commercial version.",
+   "flags": [
+    "Study table at an implied Rs.2,778/sqft against a Rs.1,000-1,550 range elsewhere",
+    "Quote is valid for 15 days only from 21-07-2026 - already lapsed and will need reissuing"
+   ],
+   "m": {
+    "basketAmt": 258200,
+    "basketArea": 135.0,
+    "basketRate": 1912.5925925925926,
+    "extrasAmt": 0,
+    "addonsAmt": 0,
+    "imputedDressing": 0,
+    "imputedRate": null,
+    "adjAmt": 258200,
+    "adjArea": 135.0,
+    "adjRate": 1912.5925925925926,
+    "adjWithGst": 304676.0,
+    "quotedSubtotal": 258200,
+    "quotedWithGst": 304676.0,
+    "gstStatedAmt": 46476.0,
+    "headlineWardrobe": 2200,
+    "scopeComplete": true
+   },
+   "sourceNote": "Sattva Buildcraft-1.pdf - BOQ dated 21-07-2026",
+   "rank": 8,
+   "rateNote": "The highest rate card in the set on every line. Study table at an implied Rs.2,778/sq.ft is the single dearest unit rate in the analysis."
+  }
+ ],
+ "rules": [
+  {
+   "title": "Compare a fixed basket, not the bottom line",
+   "body": "Every option is reduced to the same four elements - wardrobe, loft, dressing unit and study or window table. Book shelves, transport charges and round-offs are lifted out because only one vendor quoted each."
+  },
+  {
+   "title": "Price in the missing dressing unit",
+   "body": "Ramdev and both Infinity options quoted no dressing unit. A notional 17.5 sq.ft unit is added at each vendor's own wardrobe rate, so they are not rewarded in the ranking for quoting less work."
+  },
+  {
+   "title": "Hold out-of-scope rooms entirely",
+   "body": "Mr. Jagadish priced a Bedroom-3 loft, a showcase and a crockery unit; Mr. Laxman priced a hall crockery unit. Neither was requested from the other four vendors, so both sit outside the ranking and are reported separately."
+  },
+  {
+   "title": "Put every vendor on the same tax footing",
+   "body": "WeWia and Sattva state 18% GST extra. The other four state nothing at all, which is not the same as zero. The ranking runs on ex-GST figures, with an 18%-applied column alongside it."
+  }
+ ],
+ "negotiation": [
+  {
+   "priority": 1,
+   "title": "Mr. Laxman - loft priced at the full wardrobe rate",
+   "body": "Loft is charged at Rs.1,350/sq.ft, identical to the wardrobe. Every other vendor prices loft between 47% and 63% of their own wardrobe rate, and the median loft rate across the set is Rs.920. A loft is simpler work with no shutters, no drawers and no soft-close hardware, so the parity is difficult to justify. Bringing 46.8 sq.ft to the median is the single largest concession available anywhere in this exercise.",
+   "value": 20145.51724137931,
+   "valueLabel": "if brought to median"
+  },
+  {
+   "priority": 1,
+   "title": "Sattva Buildcraft - study table quoted lumpsum, far above market",
+   "body": "Both Sattva options price an 18 sq.ft study table as a lumpsum: Rs.46,000 on Option 1 and Rs.50,000 on Option 2, working back to Rs.2,556 and Rs.2,778/sq.ft. The rest of the field sits between Rs.1,000 and Rs.1,550. Ask for the study table to be re-quoted on a rate basis like every other line.",
+   "value": 47400.0,
+   "valueLabel": "across both options"
+  },
+  {
+   "priority": 1,
+   "title": "Four of six vendors have taken no position on GST",
+   "body": "Only WeWia and Sattva state 18% GST extra. Mr. Jagadish, Mr. Laxman, Ramdev and Infinity say nothing, which usually signals an intention to bill without tax. On Mr. Jagadish's evaluated figure alone the difference is 27,178 rupees. Settle in writing whether the price is with or without GST before comparing anything, because a silent quote is not a tax-free quote.",
+   "value": 27177.66,
+   "valueLabel": "on L1 alone"
+  },
+  {
+   "priority": 2,
+   "title": "Mr. Jagadish - dressing unit is half the size of everyone else's",
+   "body": "His dressing table is 8.75 sq.ft against 17.5 sq.ft from Sattva and 18.43 sq.ft from WeWia. His basket is complete, but it is not equivalent. Bringing the unit to a comparable size at his own Rs.1,250/sq.ft rate would add roughly this much - and his position as lowest evaluated cost still holds comfortably afterwards.",
+   "value": 10937.5,
+   "valueLabel": "cost to match"
+  },
+  {
+   "priority": 2,
+   "title": "WeWia - handle allowance is capped, balance payable by you",
+   "body": "The quotation caps handles at Rs.650 for wardrobes and Rs.180 for lofts, with anything above payable extra. Soft-close hardware is committed for the kitchen only; room hardware is named as Hafele but the closing mechanism is not committed. Both are written into the quote and both are open cost.",
+   "value": null,
+   "valueLabel": "open cost"
+  },
+  {
+   "priority": 3,
+   "title": "Sattva Buildcraft - both quotes have lapsed",
+   "body": "Both options are marked valid for 15 days from 21 July 2026 and are well past that. Any comparison using these figures needs a reissued quote before it can be relied on, and reissuing is the natural moment to raise the study table rate.",
+   "value": null,
+   "valueLabel": "reissue needed"
+  }
+ ],
+ "routes": [
+  {
+   "id": "jagadish",
+   "label": "Route A - lowest cost",
+   "tone": "cost",
+   "body": "Lowest on both measures that matter: total evaluated cost and cost per square foot. At Rs.995/sq.ft he is 24% below the next option and 48% below the most expensive. The basket is complete and the arithmetic on his sheet is internally consistent, including across the separate add-on page. What does not exist is any documentation - no laminate brand, no hardware model, no warranty, no timeline, no tax position.",
+   "when": "Capital cost is the deciding factor and you are willing to run the specification conversation yourself, in writing, before releasing any advance.",
+   "condition": "A typed quotation naming plywood brand and grade, laminate brand and thickness, hardware make and model, factory versus site finish, delivery date and GST position. Until that exists there is nothing to enforce."
+  },
+  {
+   "id": "laxman",
+   "label": "Route B - durability",
+   "tone": "spec",
+   "body": "The only quote pairing a premium 710 BWP plywood with a 10-year warranty certificate, with a complete basket including the dressing unit bundled into the wardrobe. The plywood claim is verbal and needs to be pinned to Century Sainik 710 by name, with the certificate issued in your name on delivery. The loft rate is the obvious concession to ask for.",
+   "when": "Waterproof plywood and a warranty you can actually call on are worth more to you than the difference in price, particularly for a bedroom that shares a wall with a bathroom or an external face.",
+   "condition": "Century Sainik 710 BWP named in writing with the 10-year certificate confirmed in your name, the loft rate revisited, and the hall crockery unit quoted separately so it never blurs into the base scope."
+  }
+ ],
+ "checklist": [
+  {
+   "priority": 1,
+   "title": "A typed, signed quotation on the same four-line basket",
+   "tag": "all vendors",
+   "body": "Wardrobe, loft, dressing unit and study table, each with area, rate and amount shown separately. No bundled lines and no lumpsum, so that any later change in scope can be priced against a rate you already agreed."
+  },
+  {
+   "priority": 1,
+   "title": "Plywood brand, grade and thickness named on the quote",
+   "tag": "all vendors",
+   "body": "BWP against BWR against commercial is the single largest driver of the price spread here. A verbal mention of Century Sainik is not a specification and cannot be enforced after installation, when the material is no longer visible."
+  },
+  {
+   "priority": 1,
+   "title": "GST position stated explicitly",
+   "tag": "4 of 6 vendors",
+   "body": "Whether the figure is inclusive or exclusive, and whether a tax invoice will be raised. This is worth up to 18% and is currently unanswered by four of the six vendors."
+  },
+  {
+   "priority": 2,
+   "title": "Factory finish or site finish, stated plainly",
+   "tag": "all vendors",
+   "body": "Shutter pressing, edge banding and polishing done in a factory give a materially better finish than the same work done on site, and change how much disruption you live through. No vendor has confirmed which they are doing."
+  },
+  {
+   "priority": 2,
+   "title": "Hardware make and model, including the closing mechanism",
+   "tag": "all vendors",
+   "body": "Named brands only - EBCO, Hafele, Godrej, Tandem - with the model or series and whether soft-close is included on every unit or only some. WeWia has already limited soft-close to the kitchen in writing."
+  },
+  {
+   "priority": 2,
+   "title": "Start date, delivery date and installation duration",
+   "tag": "5 of 6 vendors",
+   "body": "Only WeWia has committed to anything, at 55 days. Ask the rest for dates with a stated remedy for delay, whether a holdback or a penalty."
+  },
+  {
+   "priority": 3,
+   "title": "Payment schedule tied to milestones, not to dates",
+   "tag": "all vendors",
+   "body": "WeWia's 50/45/5 split leaves only 5% held back after installation, which is thin protection. Negotiate a larger final retention released after snagging is signed off."
+  },
+  {
+   "priority": 3,
+   "title": "Warranty scope and a defect rectification window",
+   "tag": "all vendors",
+   "body": "A 10-year certificate is only useful if it says what it covers - plywood delamination, hardware failure, laminate lifting - and who pays for labour during a rectification."
+  }
+ ]
+};
+
+let rows = [], charts = {}, live = DATA;
+
+/* ---------------- boot ---------------- */
+window.addEventListener("load", boot);
+
+function boot(){
+  if (typeof google !== "undefined" && google.script && google.script.run){
+    setMode("Live Apps Script", true);
+    google.script.run.withSuccessHandler(onRemote).withFailureHandler(()=>useLocal("Embedded data")).getQuotationData();
+    return;
+  }
+  if (GAS_WEB_APP_URL && !GAS_WEB_APP_URL.includes("PASTE_YOUR")){
+    setMode("Loading live data", true);
+    jsonp(GAS_WEB_APP_URL).then(onRemote).catch(()=>useLocal("Embedded data"));
+    return;
+  }
+  useLocal("Verified source set");
+}
+
+function jsonp(url){
+  return new Promise((res,rej)=>{
+    const cb = "qcb_"+Date.now(), s = document.createElement("script");
+    window[cb] = d => { delete window[cb]; s.remove(); res(d); };
+    s.onerror = () => { delete window[cb]; s.remove(); rej(); };
+    s.src = url + (url.includes("?")?"&":"?") + "api=json&callback=" + cb;
+    document.body.appendChild(s);
+  });
+}
+
+/* Apps Script owns every calculation. Whatever it returns is rendered as-is;
+   the embedded set is only a fallback for static hosting. */
+function onRemote(r){
+  if (r && r.status === "success" && r.data && Array.isArray(r.data.vendors) && r.data.vendors.length){
+    live = r.data;
+    rows = r.data.vendors;
+    setMode("Live sheet data", true);
+    render();
+  } else {
+    useLocal(r && r.message ? "Sheet error - using embedded set" : "Embedded data");
+    if (r && r.message) console.warn("Apps Script:", r.message);
+  }
+}
+
+function useLocal(label){ live = DATA; rows = DATA.vendors; setMode(label, false); render(); }
+
+/* ---------------- render ---------------- */
+function render(){
+  const l1 = rows[0], l2 = rows[1], l8 = rows[rows.length-1];
+  const complete = rows.filter(r => r.m.scopeComplete).length;
+  const fullyDoc = rows.filter(r => gapScore(r).score >= 6).length;
+
+  txt("v-who", l1.vendor);
+  txt("v-sub", l1.option + " · " + inr(l1.m.adjAmt) + " excluding GST");
+  txt("v-rate", "₹" + Math.round(l1.m.adjRate).toLocaleString("en-IN"));
+  txt("v-gap", inr(l2.m.adjAmt - l1.m.adjAmt));
+  txt("v-spread", inr(l8.m.adjAmt - l1.m.adjAmt));
+  txt("v-docs", fullyDoc + " of " + rows.length);
+  txt("chip-count", rows.length + " options · " + live.project.quotes + " vendors");
+  txt("chip-date", live.project.asof);
+  txt("dref", live.dressingRefArea);
+  txt("foot-src", "Sources: " + rows.map(r=>r.sourceFile).filter((v,i,a)=>a.indexOf(v)===i).join("  ·  "));
+
+  renderKpis(); renderRules(); renderRank(); renderRates();
+  renderNegotiation(); renderVendors(); renderGaps(); renderAddons();
+  renderRoutes(); renderChecklist();
+  drawDelta(); drawStack(); drawRates();
+}
+
+function renderKpis(){
+  const valid = rows;
+  const l1 = valid[0];
+  const bwp = valid.filter(r => /BWP/i.test(r.plywoodGrade))[0];
+  const med = median(valid.map(r=>r.m.adjRate));
+  const tat = valid.filter(r=>r.tat).sort((a,b)=>a.tat-b.tat)[0];
+  const noTax = valid.filter(r=>!r.gstStated).length;
+
+  document.getElementById("kpis").innerHTML = [
+    kpi("good","Lowest evaluated", inr(l1.m.adjAmt), l1.vendor + " · " + Math.round(l1.m.adjRate).toLocaleString("en-IN") + "/sq.ft"),
+    kpi("warn","Lowest BWP option", bwp?inr(bwp.m.adjAmt):"—",
+        bwp ? bwp.vendor + " · " + inr(bwp.m.adjAmt-l1.m.adjAmt) + " premium" : "No BWP option quoted"),
+    kpi("","Median rate", "₹" + Math.round(med).toLocaleString("en-IN"),
+        "Per sq.ft across all " + valid.length + " priced options"),
+    kpi(noTax?"bad":"", "Tax position unstated", noTax + " of " + valid.length + " options",
+        noTax ? "Up to " + inr(sum(valid.filter(r=>!r.gstStated).map(r=>r.m.adjAmt*(live.gst||0.18)))/noTax) + " of unbilled GST each" : "All vendors stated GST")
+  ].join("");
+}
+function kpi(cls,label,val,sub){
+  return `<div class="card kpi ${cls}"><label>${label}</label><strong>${val}</strong><small>${sub}</small></div>`;
+}
+
+function renderRules(){
+  document.getElementById("rules").innerHTML = live.rules.map((r,i)=>
+    `<div class="rule"><span class="n">${i+1}</span><div><b>${esc(r.title)}</b><span>${esc(r.body)}</span></div></div>`).join("");
+}
+
+function renderRank(){
+  document.getElementById("rank-body").innerHTML = rows.map(r=>{
+    const m = r.m;
+    return `<tr class="${r.rank===1?"is-l1":""}">
+      <td><span class="rk ${r.rank===1?"one":""}">${r.rank}</span></td>
+      <td><span class="vn">${esc(r.vendor)}</span><span class="vo">${esc(r.option)}</span></td>
+      <td><span class="tag ${/BWP/i.test(r.plywoodGrade)?"warn":(r.plywoodGrade==="Not specified"?"bad":"")}">${esc(r.plywoodGrade)}</span></td>
+      <td><span class="tag ${r.source==="Formal PDF"?"good":"bad"}">${esc(r.source)}</span></td>
+      <td class="num">${m.adjArea.toFixed(2)}</td>
+      <td class="num">${inr(m.quotedSubtotal)}</td>
+      <td class="num">${adjustCell(r)}</td>
+      <td class="num"><strong>${inr(m.adjAmt)}</strong></td>
+      <td class="num">${Math.round(m.adjRate).toLocaleString("en-IN")}</td>
+      <td class="num" style="color:var(--muted)">${inr(m.adjWithGst)}</td>
+    </tr>`;
+  }).join("");
+}
+
+function adjustCell(r){
+  const parts = [];
+  if (r.m.extrasAmt) parts.push(`<span class="adj-out">&minus;${inr(r.m.extrasAmt)}<span>excluded extras</span></span>`);
+  if (r.m.imputedDressing) parts.push(`<span class="imp">+${inr(r.m.imputedDressing)}<span>dressing added</span></span>`);
+  return parts.length ? `<span class="adjstack">${parts.join("")}</span>` : '<span class="zero">&mdash;</span>';
+}
+
+function renderRates(){
+  const cats = ["wardrobe","loft","dressing","study"];
+  const pool = {};
+  cats.forEach(c => pool[c] = rows.map(r=>rateOf(r,c)).filter(v=>v!=null));
+  const lo = {}, hi = {};
+  cats.forEach(c => { lo[c]=Math.min(...pool[c]); hi[c]=Math.max(...pool[c]); });
+
+  document.getElementById("rate-body").innerHTML = rows.map(r=>{
+    const cells = cats.map(c=>{
+      const v = rateOf(r,c), line = lineOf(r,c);
+      if (v == null){
+        const host = coveredBy(r,c);
+        if (host) return `<td class="num"><span class="na">in ${esc(host.cat)}<span class="bundled">bundled</span></span></td>`;
+        if (c==="dressing" && r.m.imputedRate)
+          return `<td class="num"><span class="na" style="color:var(--rust)">none quoted</span></td>`;
+        return `<td class="num"><span class="na">not quoted</span></td>`;
+      }
+      const cls = v===lo[c] ? "hi-low" : (v===hi[c] ? "hi-high" : "");
+      const lump = line && line.basis==="lumpsum" ? '<span class="lump">LUMPSUM</span>' : "";
+      const bund = line && /bundled/i.test(line.note||"") ? '<span class="bundled">bundled</span>' : "";
+      return `<td class="num cellrate ${cls}">${Math.round(v).toLocaleString("en-IN")}${lump}${bund}</td>`;
+    }).join("");
+    return `<tr class="${r.rank===1?"is-l1":""}">
+      <td><span class="vn">${esc(r.vendor)}</span><span class="vo">${esc(r.option)}</span></td>
+      ${cells}
+      <td class="num cellrate"><strong>${Math.round(r.m.adjRate).toLocaleString("en-IN")}</strong></td>
+      <td style="font-size:11.5px;color:var(--muted);line-height:1.5">${esc(r.rateNote||"")}</td>
+    </tr>`;
+  }).join("");
+}
+
+function rateOf(r,cat){
+  const l = lineOf(r,cat);
+  if (l) return l.rate != null ? l.rate : l.amount / l.area;
+  return null;
+}
+function lineOf(r,cat){ return r.lines.find(l=>l.cat===cat) || null; }
+/* the line that absorbs `cat`, where a vendor bundled it into another element */
+function coveredBy(r,cat){ return r.lines.find(l=>(l.covers||[]).includes(cat)) || null; }
+
+function renderNegotiation(){
+  document.getElementById("negotiation-list").innerHTML = live.negotiation.map(n=>
+    `<div class="action">
+       <span class="pri p${n.priority}">${n.priority}</span>
+       <div><b>${esc(n.title)}</b><p>${esc(n.body)}</p></div>
+       <div class="val">${n.value?inr(n.value):"—"}<small>${esc(n.valueLabel||"headroom")}</small></div>
+     </div>`).join("");
+}
+
+function renderVendors(){
+  document.getElementById("vendor-grid").innerHTML = rows.map(r=>{
+    const g = gapScore(r);
+    return `<article class="card vcard ${r.rank===1?"rank1":""}">
+      <div class="vtop">
+        <div><span class="vn" style="font-size:15px">${esc(r.vendor)}</span><span class="vo">${esc(r.option)}</span></div>
+        <div><span class="amt">${inr(r.m.adjAmt)}</span><span class="amtsub">adjusted · ex-GST</span></div>
+      </div>
+      <div class="tags">
+        <span class="tag ${r.rank===1?"good":""}">L${r.rank}</span>
+        <span class="tag ${r.source==="Formal PDF"?"good":"bad"}">${esc(r.source)}</span>
+        <span class="tag ${/BWP/i.test(r.plywoodGrade)?"warn":(r.plywoodGrade==="Not specified"?"bad":"")}">${esc(r.plywoodGrade)}</span>
+        ${r.m.scopeComplete?'<span class="tag good">Full basket</span>':'<span class="tag bad">No dressing unit</span>'}
+        ${r.tat?`<span class="tag good">${r.tat} days</span>`:'<span class="tag bad">No timeline</span>'}
+        ${r.gstStated?'<span class="tag good">GST stated</span>':'<span class="tag bad">Tax unstated</span>'}
+      </div>
+      <div class="specs">
+        ${spec("Plywood", r.plywood, r.plywoodConfidence)}
+        ${spec("Laminate", r.laminate)}
+        ${spec("Hardware", r.hardware, r.hardwareConfidence)}
+        ${spec("Warranty", r.warranty)}
+        ${spec("Finish", r.factoryFinish)}
+        ${spec("Rate/sq.ft", "₹" + Math.round(r.m.adjRate).toLocaleString("en-IN") + " blended over " + r.m.adjArea.toFixed(2) + " sq.ft")}
+      </div>
+      <div class="vnote">${esc(r.observations)}</div>
+      ${(r.flags||[]).length?`<div class="vflags">${r.flags.map(f=>`<div class="vflag">${esc(f)}</div>`).join("")}</div>`:""}
+      <div class="vsrc"><b>Source:</b> ${esc(r.sourceNote)} &nbsp;·&nbsp; <b>Documentation score:</b> ${g.score}/7</div>
+    </article>`;
+  }).join("");
+}
+
+function spec(label, val, conf){
+  const weak = !val || /not specified|not confirmed/i.test(val);
+  const badge = conf==="verbal" ? ' <span class="tag bad" style="font-size:9px;padding:1px 6px">verbal only</span>' : "";
+  return `<div class="spec"><b>${label}</b><span class="${weak?"unk":""}">${esc(val||"Not specified")}${weak?"":badge}</span></div>`;
+}
+
+/* ---------------- documentation scoring ---------------- */
+function gapScore(r){
+  const w = v => !v || /not specified|not confirmed/i.test(v) ? 0 : 1;
+  const c = {
+    plywood:  r.plywoodConfidence==="written" ? 2 : (r.plywoodConfidence==="verbal" ? 1 : 0),
+    laminate: w(r.laminate) ? 2 : 0,
+    hardware: r.hardwareConfidence==="written" ? 2 : (r.hardwareConfidence==="verbal" ? 1 : 0),
+    warranty: w(r.warranty) ? 2 : 0,
+    timeline: r.tat ? 2 : 0,
+    tax:      r.gstStated ? 2 : 0,
+    finish:   /confirm/i.test(r.factoryFinish||"") ? 1 : (w(r.factoryFinish) ? 2 : 0)
+  };
+  const score = Object.values(c).reduce((a,b)=>a+b,0) / 2;
+  return {c, score};
+}
+
+function renderGaps(){
+  const mark = n => n===2 ? '<span class="yes">&#10003;</span>' : (n===1 ? '<span class="part">~</span>' : '<span class="no">&times;</span>');
+  document.getElementById("gap-body").innerHTML = rows.map(r=>{
+    const g = gapScore(r), pct = (g.score/7)*100;
+    const col = pct>=70 ? "var(--teal)" : (pct>=40 ? "var(--gold)" : "var(--rust)");
+    return `<tr class="${r.rank===1?"is-l1":""}">
+      <td><span class="vn">${esc(r.vendor)}</span><span class="vo">${esc(r.option)}</span></td>
+      ${["plywood","laminate","hardware","warranty","timeline","tax","finish"].map(k=>`<td class="gapcell">${mark(g.c[k])}</td>`).join("")}
+      <td class="num"><span class="gapscore" style="color:${col}">${g.score}/7</span>
+        <span class="bar" style="margin-left:auto"><i style="width:${pct}%;background:${col}"></i></span></td>
+    </tr>`;
+  }).join("");
+}
+
+function renderAddons(){
+  const list = [];
+  rows.forEach(r=>{
+    r.addons.forEach(a=>list.push({v:r.vendor,i:a.item,a:a.area,rt:a.rate,amt:a.amount,
+      why:"Additional room or unit that was not part of the enquiry sent to the other vendors"}));
+    r.extras.forEach(e=>list.push({v:r.vendor+" "+r.option,i:e.item,a:e.area,rt:e.rate,amt:e.amount,why:e.why}));
+  });
+  document.getElementById("addon-body").innerHTML = list.map(x=>
+    `<tr><td><span class="vn">${esc(x.v)}</span></td><td>${esc(x.i)}</td>
+     <td style="font-size:11.5px;color:var(--muted);line-height:1.5">${esc(x.why)}</td>
+     <td class="num">${x.a?x.a.toFixed(2):"—"}</td>
+     <td class="num">${x.rt?Math.round(x.rt).toLocaleString("en-IN"):"—"}</td>
+     <td class="num"><strong>${inr(x.amt)}</strong></td></tr>`).join("");
+
+  document.getElementById("addon-cards").innerHTML = rows.filter(r=>r.addons.length).map(r=>{
+    const t = sum(r.addons.map(a=>a.amount));
+    return `<div class="card pad">
+      <div class="kicker" style="margin-bottom:10px">${esc(r.vendor)} · full quote if add-ons proceed</div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:8px 0;border-bottom:1px solid var(--line-soft)">
+        <span style="font-size:13px;color:var(--muted)">Comparable basket</span><span class="mono" style="font-weight:600">${inr(r.quotedSubtotal)}</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:8px 0;border-bottom:1px solid var(--line-soft)">
+        <span style="font-size:13px;color:var(--muted)">Additional units (${r.addons.length})</span><span class="mono" style="font-weight:600;color:var(--gold)">+ ${inr(t)}</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:11px 0 0">
+        <span style="font-size:13px;font-weight:600">Total if all proceeds</span>
+        <span class="mono" style="font-weight:600;font-size:17px">${inr(r.fullQuoteWithAddons)}</span></div>
+      <p style="font-size:11.5px;color:var(--muted);margin:12px 0 0;line-height:1.6">${esc(r.addons.map(a=>a.item).join(" · "))}</p>
+    </div>`;
+  }).join("");
+}
+
+function renderRoutes(){
+  document.getElementById("routes").innerHTML = live.routes.map(rt=>{
+    const v = rows.find(r=>r.id===rt.id) || rows[0];
+    return `<div class="card pad" style="border-color:${rt.tone==="cost"?"var(--teal-line)":"var(--gold-line)"}">
+      <div class="kicker" style="color:${rt.tone==="cost"?"var(--teal)":"var(--gold)"};margin-bottom:10px">${esc(rt.label)}</div>
+      <h3 style="margin:0 0 4px;font-size:21px">${esc(v.vendor)}</h3>
+      <div style="font-size:12.5px;color:var(--muted);margin-bottom:14px">${esc(v.option)} &middot; ${inr(v.m.adjAmt)} ex-GST &middot; ${inr(v.m.adjWithGst)} with 18% GST</div>
+      <p style="margin:0 0 14px;font-size:13.5px;line-height:1.7;color:var(--ink-2)">${esc(rt.body)}</p>
+      <div style="border-top:1px solid var(--line-soft);padding-top:13px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:8px">Take this route if</div>
+        <div style="font-size:13px;color:var(--ink-2);line-height:1.65">${esc(rt.when)}</div>
+      </div>
+      <div style="border-top:1px solid var(--line-soft);padding-top:13px;margin-top:13px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:8px">Condition of award</div>
+        <div style="font-size:13px;color:var(--ink-2);line-height:1.65">${esc(rt.condition)}</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function renderChecklist(){
+  document.getElementById("checklist").innerHTML = live.checklist.map((c,i)=>
+    `<div class="action"><span class="pri p${c.priority}">${i+1}</span>
+     <div><b>${esc(c.title)}</b><p>${esc(c.body)}</p></div>
+     <div class="val" style="color:var(--muted);font-size:11px">${esc(c.tag)}</div></div>`).join("");
+}
+
+/* ---------------- charts ---------------- */
+const FONT = "Inter, sans-serif";
+function drawDelta(){
+  const d = rows.map(r=>r.m.adjAmt - r.m.quotedSubtotal);
+  make("deltaChart", {
+    type:"bar",
+    data:{ labels: rows.map(r=>shortName(r)),
+      datasets:[{ label:"Scope adjustment", data:d,
+        backgroundColor: d.map(v=>v>0?"rgba(169,125,36,.78)":"rgba(13,107,100,.28)"),
+        borderRadius:5, borderSkipped:false }]},
+    options:{ indexAxis:"y", responsive:true, maintainAspectRatio:false,
+      layout:{padding:{right:12}},
+      plugins:{ legend:{display:false},
+        tooltip:{callbacks:{label:c=> c.raw>0 ? "Understated by "+inr(c.raw) : "No adjustment"}}},
+      scales:{ x:{ ticks:{callback:v=>v?inr(v):"0", font:{family:FONT,size:10}}, grid:{color:"#eef1f5"} },
+               y:{ ticks:{font:{family:FONT,size:10.5}}, grid:{display:false} } } }
+  });
+}
+
+function drawStack(){
+  const cats = [["wardrobe","Wardrobe","#0d6b64"],["loft","Loft","#3f9a86"],
+                ["dressing","Dressing","#a97d24"],["study","Study / table","#c9a44c"]];
+  make("stackChart", {
+    type:"bar",
+    data:{ labels: rows.map(r=>shortName(r)),
+      datasets: cats.map(([k,label,col])=>({
+        label, backgroundColor:col, borderRadius:3, borderSkipped:false,
+        data: rows.map(r=>{
+          const l = lineOf(r,k);
+          if (l) return l.amount;
+          if (k==="dressing" && r.m.imputedDressing) return r.m.imputedDressing;
+          return 0;
+        })
+      }))
+    },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{position:"bottom", labels:{boxWidth:9,boxHeight:9,font:{family:FONT,size:10.5},padding:12,usePointStyle:true,pointStyle:"rectRounded"}},
+        tooltip:{ callbacks:{ label:c=>c.dataset.label+": "+inr(c.raw),
+          footer:items=>"Total: "+inr(items.reduce((a,b)=>a+b.raw,0)) } } },
+      scales:{ x:{ stacked:true, ticks:{font:{family:FONT,size:10},maxRotation:38,minRotation:24}, grid:{display:false} },
+               y:{ stacked:true, beginAtZero:true, ticks:{callback:v=>inr(v),font:{family:FONT,size:10}}, grid:{color:"#eef1f5"} } } }
+  });
+}
+
+function drawRates(){
+  const cats = [["wardrobe","Wardrobe","#0d6b64"],["loft","Loft","#3f9a86"],
+                ["dressing","Dressing","#a97d24"],["study","Study / table","#c9a44c"]];
+  make("rateChart", {
+    type:"bar",
+    data:{ labels: rows.map(r=>shortName(r)),
+      datasets: cats.map(([k,label,col])=>({
+        label, backgroundColor:col, borderRadius:3, borderSkipped:false,
+        data: rows.map(r=>rateOf(r,k) || null) }))
+    },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{position:"bottom", labels:{boxWidth:9,boxHeight:9,font:{family:FONT,size:10.5},padding:12,usePointStyle:true,pointStyle:"rectRounded"}},
+        tooltip:{callbacks:{label:c=>c.dataset.label+": ₹"+Math.round(c.raw).toLocaleString("en-IN")+"/sq.ft"}}},
+      scales:{ x:{ ticks:{font:{family:FONT,size:10},maxRotation:38,minRotation:24}, grid:{display:false} },
+               y:{ beginAtZero:true, ticks:{callback:v=>"₹"+v.toLocaleString("en-IN"),font:{family:FONT,size:10}}, grid:{color:"#eef1f5"} } } }
+  });
+}
+
+function make(id, cfg){
+  if (charts[id]) charts[id].destroy();
+  charts[id] = new Chart(document.getElementById(id), cfg);
+}
+
+/* ---------------- export ---------------- */
+function exportCSV(){
+  const head = ["Rank","Vendor","Option","Source","Plywood grade","Basket sqft","As quoted (ex-GST)",
+    "Scope adjustment","Adjusted (ex-GST)","Rs per sqft","With 18% GST","Warranty","TAT days",
+    "GST stated","Documentation score","Out-of-scope add-ons"];
+  const body = rows.map(r=>[r.rank,r.vendor,r.option,r.source,r.plywoodGrade,r.m.adjArea,
+    Math.round(r.m.quotedSubtotal), Math.round(r.m.imputedDressing), Math.round(r.m.adjAmt),
+    Math.round(r.m.adjRate), Math.round(r.m.adjWithGst), r.warranty, r.tat||"Not stated",
+    r.gstStated?"18%":"Not stated", gapScore(r).score+"/7", Math.round(r.m.addonsAmt)]);
+  const csv = [head,...body].map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv;charset=utf-8"}));
+  a.download = "quotation_evaluation_like_for_like.csv";
+  document.body.appendChild(a); a.click(); a.remove();
+}
+
+/* ---------------- helpers ---------------- */
+function shortName(r){
+  const v = r.vendor.replace(/^Mr\.\s*/,"").replace(" Interiors","").replace(" Modular","").replace(" Buildcraft","");
+  const o = /Option\s*([12])/i.exec(r.option);
+  return o ? v + " O" + o[1] : v;
+}
+function inr(n){ if(n==null||isNaN(n)) return "—"; return "₹" + Math.round(n).toLocaleString("en-IN"); }
+function sum(a){ return a.reduce((x,y)=>x+y,0); }
+function median(a){ const s=[...a].sort((x,y)=>x-y), m=s.length>>1;
+  return s.length%2 ? s[m] : (s[m-1]+s[m])/2; }
+function txt(id,v){ const e=document.getElementById(id); if(e) e.textContent=v; }
+function esc(v){ return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+function setMode(label, live){
+  txt("data-mode", label);
+  const d = document.getElementById("mode-dot"); if (d) d.className = live ? "dot live" : "dot";
+}
+</script>
+</body>
+</html>
